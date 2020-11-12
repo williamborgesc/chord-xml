@@ -40,32 +40,35 @@ public class Application {
         part.getMeasure().add(PartHelper.createLeadingMeasure(String.valueOf(measureNumber++), KeyEnum.fromValue(key), beats, beatsType));
         boolean rehearse = false;
 
-        ScorePartwise.Part.Measure measure = PartHelper.createMeasure(String.valueOf(measureNumber++), divisions);
+        ScorePartwise.Part.Measure measure = null;
         for (String measureString : measures) {
 
             if (measureString.isBlank()) {
                 if (rehearse) {
                     continue;
                 }
+                measure = PartHelper.createMeasure(String.valueOf(measureNumber++), divisions);
                 measure.getNoteOrBackupOrForward().add(PartHelper.createRehearsalMark(getLetter(markChar++)));
                 rehearse = true;
                 continue;
             } else {
-                measure = PartHelper.createMeasure(String.valueOf(measureNumber++), divisions);
+                if (!rehearse) {
+                    measure = PartHelper.createMeasure(String.valueOf(measureNumber++), divisions);
+                }
+                rehearse = false;
+
+                String[] chords = measureString.split(" ");
+
+                Integer noteDuration = Integer.valueOf(beats) / chords.length;
+
+                for (String chord : chords) {
+                    Harmony harmony = PartHelper.createHarmony(chord.substring(0, 1), chord.contains("m") ? KindValue.MINOR : KindValue.MAJOR);
+
+                    measure.getNoteOrBackupOrForward().add(harmony);
+                    measure.getNoteOrBackupOrForward().add(PartHelper.createNote(new BigDecimal(noteDuration.toString())));
+                }
+                part.getMeasure().add(measure);
             }
-            rehearse = false;
-
-            String[] chords = measureString.split(" ");
-
-            Integer noteDuration = Integer.valueOf(beats) / chords.length;
-
-            for (String chord : chords) {
-                Harmony harmony = PartHelper.createHarmony(chord.substring(0, 1), chord.contains("m") ? KindValue.MINOR : KindValue.MAJOR);
-
-                measure.getNoteOrBackupOrForward().add(harmony);
-                measure.getNoteOrBackupOrForward().add(PartHelper.createNote(new BigDecimal(noteDuration.toString())));
-            }
-            part.getMeasure().add(measure);
         }
 
         DefaultScore score = new DefaultScore(songName, part);
