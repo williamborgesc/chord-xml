@@ -18,14 +18,17 @@ import java.util.List;
 public class Application {
 
     public static String key = "B";
-    public static String timeSignature = "6/8";
+    public static String timeSignature = "4/4";
     public static String songName = "Test";
 
     // TODO Tetrades
     // TODO Create Screen
     // TODO inversions
     // TODO RITORNELLO
-    // TODO RITORNELLO
+    // TODO # and b
+    // TODO %
+    // TODO check chords in key
+    // TODO improve rehearse
 
     public static void main(String[] args) throws JAXBException {
         List<String> measures = ChordsParser.parseFileToMeasures(new File("D:\\Dev\\eclipse-wp\\chord-xml\\source.txt"));
@@ -72,7 +75,7 @@ public class Application {
                 }
                 rehearse = false;
 
-                String[] chords = measureString.split(" ");
+                String[] chords = measureString.replaceAll("\\/{2,}", "/").split(" ");
                 Integer noteDuration = Integer.valueOf(beats) / chords.length;
 
                 for (int i = 0; i < chords.length; i++) {
