@@ -6,7 +6,6 @@ import generated.Clef;
 import generated.ClefSign;
 import generated.Direction;
 import generated.DirectionType;
-import generated.FormattedText;
 import generated.FormattedTextId;
 import generated.Harmony;
 import generated.Key;
@@ -30,13 +29,13 @@ public class PartHelper {
 
     public static final BigDecimal DEFAULT_MEASURE_WIDTH = new BigDecimal("240");
 
-    public static ScorePartwise.Part.Measure createLeadingMeasure(String number, KeyEnum key, String beats, String beatsType) {
+    public static ScorePartwise.Part.Measure createLeadingMeasure(String number, KeyEnum key, String beats, String beatsType, BigDecimal divisions) {
 
         ScorePartwise.Part.Measure measure = new ScorePartwise.Part.Measure();
         measure.setWidth(DEFAULT_MEASURE_WIDTH);
         measure.setNumber(number);
-        measure.getNoteOrBackupOrForward().add(getLeadingAttributes(key, beats, beatsType));
-        measure.getNoteOrBackupOrForward().add(getNote(beatsType));
+        measure.getNoteOrBackupOrForward().add(getLeadingAttributes(key, beats, beatsType, divisions));
+        measure.getNoteOrBackupOrForward().add(getNote(beats));
 
         return measure;
     }
@@ -78,9 +77,9 @@ public class PartHelper {
         rest.setMeasure(YesNo.YES);
 
         Note note = new Note();
+        note.getContent().add(new JAXBElement(new QName("rest"), Rest.class, Note.class, rest));
         note.getContent().add(new JAXBElement(new QName("duration"), BigDecimal.class, Note.class, duration));
         note.getContent().add(new JAXBElement(new QName("voice"), String.class, Note.class, "1"));
-        note.getContent().add(new JAXBElement(new QName("rest"), Rest.class, Note.class, rest));
 
         return note;
     }
@@ -102,14 +101,14 @@ public class PartHelper {
         return direction;
     }
 
-    private static Note getNote(String beatsType) {
+    private static Note getNote(String duration) {
         Note note = new Note();
 
         Rest rest = new Rest();
         rest.setMeasure(YesNo.YES);
 
         note.getContent().add(new JAXBElement(new QName("rest"), Rest.class, Note.class, rest));
-        note.getContent().add(new JAXBElement(new QName("duration"), BigDecimal.class, Note.class, new BigDecimal(beatsType)));
+        note.getContent().add(new JAXBElement(new QName("duration"), BigDecimal.class, Note.class, new BigDecimal(duration)));
         note.getContent().add(new JAXBElement(new QName("voice"), String.class, Note.class, "1"));
 
         return note;
@@ -131,9 +130,9 @@ public class PartHelper {
         return attributes;
     }
 
-    private static Attributes getLeadingAttributes(KeyEnum key, String beats, String beatsType) {
+    private static Attributes getLeadingAttributes(KeyEnum key, String beats, String beatsType, BigDecimal divisions) {
         Attributes attributes = new Attributes();
-        attributes.setDivisions(BigDecimal.ONE);
+        attributes.setDivisions(divisions);
         attributes.getKey().add(getKey(key));
         attributes.getTime().add(getTime(beats, beatsType));
         attributes.getClef().add(getClef());

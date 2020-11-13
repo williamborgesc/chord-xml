@@ -29,7 +29,6 @@ public class ChordsParser {
                 .filter(line -> line.startsWith("|") || line.isBlank())
                 .map(line -> line.replace("||:", "|"))
                 .map(line -> line.replace(":||", "|"))
-                .map(line -> line.replaceAll("-", ""))
                 .forEach(line -> measures.addAll(extractMeasures(line)));
 
         return measures;

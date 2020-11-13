@@ -17,7 +17,7 @@ public class Main {
         JAXBContext jaxbContext = JAXBContext.newInstance(ScorePartwise.class);
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
-        StringReader reader = new StringReader(FileUtils.readFileToString(new File("D:\\William\\Desktop\\Ever Be.musicxml"), "utf-8"));
+        StringReader reader = new StringReader(FileUtils.readFileToString(new File("D:\\William\\Desktop\\Great_Are_You_Lord.musicxml"), "utf-8"));
         ScorePartwise partwise = (ScorePartwise) unmarshaller.unmarshal(reader);
 
         System.out.println(partwise);

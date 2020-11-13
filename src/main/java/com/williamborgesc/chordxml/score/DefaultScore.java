@@ -14,16 +14,17 @@ public class DefaultScore extends ScorePartwise {
         work.setWorkTitle(songName);
 
         PartList partList = new PartList();
-
-        ScorePart scorePart = new ScorePart();
-        scorePart.setId("P1");
-
         PartName partName = new PartName();
-        partName.setValue("Piano");
+        partName.setValue("Base");
 
         ScoreInstrument scoreInstrument = new ScoreInstrument();
         scoreInstrument.setId("P1-I1");
         scoreInstrument.setInstrumentName("Piano");
+
+        ScorePart scorePart = new ScorePart();
+        scorePart.setId("P1");
+        scorePart.setPartName(partName);
+        scorePart.getScoreInstrument().add(scoreInstrument);
 
         partList.setScorePart(scorePart);
 
