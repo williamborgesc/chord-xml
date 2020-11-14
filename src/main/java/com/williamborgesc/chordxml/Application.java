@@ -17,18 +17,21 @@ import java.util.List;
 
 public class Application {
 
+    public static final String FLAT = "b";
+    public static final String SHARP = "#";
+    public static final String MINOR = "m";
+
     public static String key = "B";
     public static String timeSignature = "4/4";
     public static String songName = "Test";
 
     // TODO Tetrades
-    // TODO Create Screen
     // TODO inversions
     // TODO RITORNELLO
-    // TODO # and b
+    // TODO check chords in key (probably fixed with #)
     // TODO %
-    // TODO check chords in key
     // TODO improve rehearse
+    // TODO Create Screen
 
     public static void main(String[] args) throws JAXBException {
         List<String> measures = ChordsParser.parseFileToMeasures(new File("D:\\Dev\\eclipse-wp\\chord-xml\\source.txt"));
@@ -95,9 +98,20 @@ public class Application {
     }
 
     private static void addHarmonyToMeasure(ScorePartwise.Part.Measure measure, Integer noteDuration, String chord) {
-        Harmony harmony = PartHelper.createHarmony(chord.substring(0, 1), chord.contains("m") ? KindValue.MINOR : KindValue.MAJOR);
+        Harmony harmony = PartHelper.createHarmony(chord.substring(0, 1), chord.contains(MINOR) ? KindValue.MINOR : KindValue.MAJOR, getAlter(chord));
         measure.getNoteOrBackupOrForward().add(harmony);
         measure.getNoteOrBackupOrForward().add(PartHelper.createNote(new BigDecimal(noteDuration.toString())));
+    }
+
+    private static String getAlter(String chord) {
+        if (chord.contains(SHARP)) {
+            return SHARP;
+        }
+        if (chord.contains(FLAT)) {
+            return FLAT;
+        }
+
+        return "";
     }
 
     private static String getLetter(int markChar) {

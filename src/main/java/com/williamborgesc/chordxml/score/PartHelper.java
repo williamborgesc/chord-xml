@@ -14,6 +14,7 @@ import generated.KindValue;
 import generated.Note;
 import generated.Rest;
 import generated.Root;
+import generated.RootAlter;
 import generated.RootStep;
 import generated.ScorePartwise;
 import generated.Step;
@@ -28,6 +29,7 @@ import java.math.BigInteger;
 public class PartHelper {
 
     public static final BigDecimal DEFAULT_MEASURE_WIDTH = new BigDecimal("240");
+
 
     public static ScorePartwise.Part.Measure createLeadingMeasure(String number, KeyEnum key, String beats, String beatsType, BigDecimal divisions) {
 
@@ -60,12 +62,12 @@ public class PartHelper {
         return measure;
     }
 
-    public static Harmony createHarmony(String rootNote, KindValue kindValue) {
+    public static Harmony createHarmony(String rootNote, KindValue kindValue, String alter) {
         Kind kind = new Kind();
         kind.setValue(kindValue);
 
         Harmony harmony = new Harmony();
-        harmony.getHarmonyChord().add(getRoot(Step.fromValue(rootNote)));
+        harmony.getHarmonyChord().add(getRoot(rootNote, alter));
         harmony.getHarmonyChord().add(kind);
         harmony.setPrintFrame(YesNo.NO);
 
@@ -114,20 +116,27 @@ public class PartHelper {
         return note;
     }
 
-    private static Object getRoot(Step step) {
-        Root root = new Root();
-        RootStep rootStep = new RootStep();
-        rootStep.setValue(step);
-        root.setRootStep(rootStep);
-
-        return root;
-    }
-
     private static Attributes getAttributes(BigDecimal divisions) {
         Attributes attributes = new Attributes();
         attributes.setDivisions(divisions);
 
         return attributes;
+    }
+
+    private static Object getRoot(String step, String alter) {
+        Root root = new Root();
+
+        RootStep rootStep = new RootStep();
+        rootStep.setValue(Step.fromValue(step));
+
+        if (!alter.isEmpty()) {
+            RootAlter rootAlter = new RootAlter();
+            rootAlter.setValue(alter.contains("#") ? BigDecimal.ONE : new BigDecimal("-1"));
+            root.setRootAlter(rootAlter);
+        }
+
+        root.setRootStep(rootStep);
+        return root;
     }
 
     private static Attributes getLeadingAttributes(KeyEnum key, String beats, String beatsType, BigDecimal divisions) {
