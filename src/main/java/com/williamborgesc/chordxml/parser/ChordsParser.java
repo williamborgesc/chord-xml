@@ -12,8 +12,6 @@ import java.util.stream.Collectors;
 
 public class ChordsParser {
 
-    public static String key = "D";
-
     public static List<String> parseFileToMeasures(File chordsSource) {
         List<String> sourceLines = null;
 

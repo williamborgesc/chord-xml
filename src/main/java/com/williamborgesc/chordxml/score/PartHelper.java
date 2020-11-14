@@ -2,6 +2,9 @@ package com.williamborgesc.chordxml.score;
 
 import generated.AboveBelow;
 import generated.Attributes;
+import generated.Bass;
+import generated.BassAlter;
+import generated.BassStep;
 import generated.Clef;
 import generated.ClefSign;
 import generated.Direction;
@@ -20,6 +23,7 @@ import generated.ScorePartwise;
 import generated.Step;
 import generated.Time;
 import generated.YesNo;
+import org.springframework.util.StringUtils;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
@@ -63,15 +67,39 @@ public class PartHelper {
     }
 
     public static Harmony createHarmony(String rootNote, KindValue kindValue, String alter) {
+        return createHarmony(rootNote, kindValue, alter, null, null);
+    }
+
+    public static Harmony createHarmony(String rootNote, KindValue kindValue, String alter, String bassNote, String bassAlter) {
         Kind kind = new Kind();
         kind.setValue(kindValue);
 
         Harmony harmony = new Harmony();
         harmony.getHarmonyChord().add(getRoot(rootNote, alter));
         harmony.getHarmonyChord().add(kind);
+        harmony.getHarmonyChord().add(getBass(bassNote, bassAlter));
         harmony.setPrintFrame(YesNo.NO);
 
         return harmony;
+    }
+
+    private static Bass getBass(String note, String alter) {
+        if (StringUtils.isEmpty(note)) {
+            return null;
+        }
+        Bass bass = new Bass();
+
+        BassStep bassStep = new BassStep();
+        bassStep.setValue(Step.fromValue(note));
+
+        if (!alter.isEmpty()) {
+            BassAlter bassAlter = new BassAlter();
+            bassAlter.setValue(alter.contains("#") ? BigDecimal.ONE : new BigDecimal("-1"));
+            bass.setBassAlter(bassAlter);
+        }
+
+        bass.setBassStep(bassStep);
+        return bass;
     }
 
     public static Note createNote(BigDecimal duration) {
@@ -123,7 +151,7 @@ public class PartHelper {
         return attributes;
     }
 
-    private static Object getRoot(String step, String alter) {
+    private static Root getRoot(String step, String alter) {
         Root root = new Root();
 
         RootStep rootStep = new RootStep();

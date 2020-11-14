@@ -26,9 +26,7 @@ public class Application {
     public static String songName = "Test";
 
     // TODO Tetrades
-    // TODO inversions
     // TODO RITORNELLO
-    // TODO check chords in key (probably fixed with #)
     // TODO %
     // TODO improve rehearse
     // TODO Create Screen
@@ -98,12 +96,37 @@ public class Application {
     }
 
     private static void addHarmonyToMeasure(ScorePartwise.Part.Measure measure, Integer noteDuration, String chord) {
-        Harmony harmony = PartHelper.createHarmony(chord.substring(0, 1), chord.contains(MINOR) ? KindValue.MINOR : KindValue.MAJOR, getAlter(chord));
+        Harmony harmony = PartHelper.createHarmony(getRootNote(chord), getChordKind(chord), getAlter(chord), getBass(chord), getBassAlter(chord));
         measure.getNoteOrBackupOrForward().add(harmony);
         measure.getNoteOrBackupOrForward().add(PartHelper.createNote(new BigDecimal(noteDuration.toString())));
     }
 
+    private static String getRootNote(String chord) {
+        return chord.substring(0, 1);
+    }
+
+    private static String getBassAlter(String chord) {
+        if (!chord.contains("/")) {
+            return null;
+        }
+        return getAlter(chord.split("/")[1]);
+    }
+
+    private static String getBass(String chord) {
+        if (!chord.contains("/")) {
+            return null;
+        }
+        return getRootNote(chord.split("/")[1]);
+    }
+
+    private static KindValue getChordKind(String chord) {
+        return chord.contains(MINOR) ? KindValue.MINOR : KindValue.MAJOR;
+    }
+
     private static String getAlter(String chord) {
+        if (chord.contains("/")) {
+            return getAlter(chord.split("/")[0]);
+        }
         if (chord.contains(SHARP)) {
             return SHARP;
         }
