@@ -25,9 +25,9 @@ public class Application {
     public static String timeSignature = "4/4";
     public static String songName = "Test";
 
+    // TODO %
     // TODO Tetrades
     // TODO RITORNELLO
-    // TODO %
     // TODO improve rehearse
     // TODO Create Screen
 
@@ -79,14 +79,22 @@ public class Application {
                 String[] chords = measureString.replaceAll("\\/{2,}", "/").split(" ");
                 Integer noteDuration = Integer.valueOf(beats) / chords.length;
 
-                for (int i = 0; i < chords.length; i++) {
-                    if ("-/".contains(chords[i])) {
-                        addNoteToMeasure(measure, noteDuration);
-                    } else {
-                        addHarmonyToMeasure(measure, noteDuration, chords[i]);
-                    }
+                if (measureString.contains("%")) {
+                    addNoteToMeasure(measure, Integer.valueOf(beats));
+                } else {
+                    addChordsToMeasure(measure, chords, noteDuration);
                 }
                 part.getMeasure().add(measure);
+            }
+        }
+    }
+
+    private static void addChordsToMeasure(ScorePartwise.Part.Measure measure, String[] chords, Integer noteDuration) {
+        for (int i = 0; i < chords.length; i++) {
+            if ("-/".contains(chords[i])) {
+                addNoteToMeasure(measure, noteDuration);
+            } else {
+                addHarmonyToMeasure(measure, noteDuration, chords[i]);
             }
         }
     }
