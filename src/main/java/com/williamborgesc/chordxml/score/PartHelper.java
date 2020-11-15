@@ -2,6 +2,8 @@ package com.williamborgesc.chordxml.score;
 
 import generated.AboveBelow;
 import generated.Attributes;
+import generated.BackwardForward;
+import generated.Barline;
 import generated.Bass;
 import generated.BassAlter;
 import generated.BassStep;
@@ -15,6 +17,7 @@ import generated.Key;
 import generated.Kind;
 import generated.KindValue;
 import generated.Note;
+import generated.Repeat;
 import generated.Rest;
 import generated.Root;
 import generated.RootAlter;
@@ -197,5 +200,23 @@ public class PartHelper {
         Key key = new Key();
         key.setFifths(keyEnum.getFifths());
         return key;
+    }
+
+    public static Barline createStartRepeat() {
+        return createRepeat(BackwardForward.FORWARD);
+    }
+
+    public static Barline createEndRepeat() {
+        return createRepeat(BackwardForward.BACKWARD);
+    }
+
+    public static Barline createRepeat(BackwardForward direction) {
+        Repeat repeat = new Repeat();
+        repeat.setDirection(direction);
+
+        Barline barline = new Barline();
+        barline.setRepeat(repeat);
+
+        return barline;
     }
 }

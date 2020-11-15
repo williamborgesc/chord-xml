@@ -1,5 +1,6 @@
 package com.williamborgesc.chordxml.parser;
 
+import com.williamborgesc.chordxml.score.Constants;
 import org.apache.commons.io.FileUtils;
 import org.springframework.util.StringUtils;
 
@@ -25,8 +26,9 @@ public class ChordsParser {
 
         sourceLines.stream()
                 .filter(line -> line.startsWith("|") || line.isBlank())
-                .map(line -> line.replace("||:", "|"))
-                .map(line -> line.replace(":||", "|"))
+                .map(line -> line.replace(":||:", "| " + Constants.RITORNELLO_START + " |" + Constants.RITORNELLO_END + " |"))
+                .map(line -> line.replace("||:", "| " + Constants.RITORNELLO_START + " |"))
+                .map(line -> line.replace(":||", "| " + Constants.RITORNELLO_END + " |"))
                 .forEach(line -> measures.addAll(extractMeasures(line)));
 
         return measures;

@@ -1,6 +1,7 @@
 package com.williamborgesc.chordxml;
 
 import com.williamborgesc.chordxml.parser.ChordsParser;
+import com.williamborgesc.chordxml.score.Constants;
 import com.williamborgesc.chordxml.score.DefaultScore;
 import com.williamborgesc.chordxml.score.KeyEnum;
 import com.williamborgesc.chordxml.score.PartHelper;
@@ -15,19 +16,16 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class Application {
+import static com.williamborgesc.chordxml.score.Constants.RITORNELLO_END;
+import static com.williamborgesc.chordxml.score.Constants.RITORNELLO_START;
 
-    public static final String FLAT = "b";
-    public static final String SHARP = "#";
-    public static final String MINOR = "m";
+public class Application {
 
     public static String key = "B";
     public static String timeSignature = "4/4";
     public static String songName = "Test";
 
-    // TODO %
     // TODO Tetrades
-    // TODO RITORNELLO
     // TODO improve rehearse
     // TODO Create Screen
 
@@ -58,24 +56,34 @@ public class Application {
     }
 
     private static void addMeasuresToPart(List<String> measures, ScorePartwise.Part part, String beats, String beatsType, BigDecimal divisions) {
-        boolean rehearse = false;
+        boolean keepMeasure = false;
         int measureNumber = 2;
         int markChar = 65;
         ScorePartwise.Part.Measure measure = null;
         for (String measureString : measures) {
             if (measureString.isBlank()) {
-                if (rehearse) {
+                if (keepMeasure) {
                     continue;
                 }
                 measure = PartHelper.createMeasure(String.valueOf(measureNumber++), divisions);
                 measure.getNoteOrBackupOrForward().add(PartHelper.createRehearsalMark(getLetter(markChar++)));
-                rehearse = true;
+                keepMeasure = true;
             } else {
-                if (!rehearse) {
+                if (!keepMeasure) {
                     measure = PartHelper.createMeasure(String.valueOf(measureNumber++), divisions);
                 }
-                rehearse = false;
+                keepMeasure = false;
 
+                if (measureString.equals(RITORNELLO_START)) {
+                    addRepeatStartToMeasure(measure);
+                    keepMeasure = true;
+                    continue;
+                }
+                if (measureString.equals(RITORNELLO_END)) {
+                    addRepeatEndToMeasure(measure);
+                    keepMeasure = true;
+                    continue;
+                }
                 String[] chords = measureString.replaceAll("\\/{2,}", "/").split(" ");
                 Integer noteDuration = Integer.valueOf(beats) / chords.length;
 
@@ -87,6 +95,14 @@ public class Application {
                 part.getMeasure().add(measure);
             }
         }
+    }
+
+    private static void addRepeatStartToMeasure(ScorePartwise.Part.Measure measure) {
+        measure.getNoteOrBackupOrForward().add(PartHelper.createStartRepeat());
+    }
+
+    private static void addRepeatEndToMeasure(ScorePartwise.Part.Measure measure) {
+        measure.getNoteOrBackupOrForward().add(PartHelper.createEndRepeat());
     }
 
     private static void addChordsToMeasure(ScorePartwise.Part.Measure measure, String[] chords, Integer noteDuration) {
@@ -128,18 +144,18 @@ public class Application {
     }
 
     private static KindValue getChordKind(String chord) {
-        return chord.contains(MINOR) ? KindValue.MINOR : KindValue.MAJOR;
+        return chord.contains(Constants.MINOR) ? KindValue.MINOR : KindValue.MAJOR;
     }
 
     private static String getAlter(String chord) {
         if (chord.contains("/")) {
             return getAlter(chord.split("/")[0]);
         }
-        if (chord.contains(SHARP)) {
-            return SHARP;
+        if (chord.contains(Constants.SHARP)) {
+            return Constants.SHARP;
         }
-        if (chord.contains(FLAT)) {
-            return FLAT;
+        if (chord.contains(Constants.FLAT)) {
+            return Constants.FLAT;
         }
 
         return "";
