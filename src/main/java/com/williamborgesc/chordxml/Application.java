@@ -26,7 +26,6 @@ public class Application {
     public static String songName = "Test";
 
     // TODO Tetrades
-    // TODO improve rehearse
     // TODO Create Screen
 
     public static void main(String[] args) throws JAXBException {
@@ -61,10 +60,7 @@ public class Application {
         int markChar = 65;
         ScorePartwise.Part.Measure measure = null;
         for (String measureString : measures) {
-            if (measureString.isBlank()) {
-                if (keepMeasure) {
-                    continue;
-                }
+            if (measureString.startsWith(Constants.SONG_SECTION)) {
                 measure = PartHelper.createMeasure(String.valueOf(measureNumber++), divisions);
                 measure.getNoteOrBackupOrForward().add(PartHelper.createRehearsalMark(getLetter(markChar++)));
                 keepMeasure = true;

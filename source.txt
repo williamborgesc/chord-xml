@@ -1,86 +1,65 @@
 INTRO
-||: B ////// | /// E/B //:||
+||: B | B - C#m - | E | //// :||
 
 VERSE 1
-||: B ////// | /// E/B //:||
-I searched the world
-But it couldn’t fill me
-| G#m | F# | E | ////// |
-Man’s empty praise
-and treasures that fade
-Are never enough
-
-VERSE 2
-||: B ////// | /// E/B //:||
-Then You came along
-And put me back together
-| G#m | F# | E | ////// |
-And every desire is now satisfied
-Here in Your love
+||: B | B - C#m - | E | //// :||
+He's coming on the clouds
+Kings and kingdoms will bow down
+| G#m | G#m - F# - | E | F# |
+Every chain will break
+As broken hearts declare His praise
+Who can stop the Lord Almighty
 
 CHORUS
-| B | ////// | G#m | ////// |
-Oh there’s nothing better than You
-There’s nothing better than You
-| E | ////// | B | ////// |
-Lord there’s nothing, nothing is better than You
+| B | B - F# - | G#m | G#m - F# |
+Our God is a Lion
+The Lion of Judah
+He's roaring in power
+And fighting our battles
+| E | F# |
+And every knee will bow before Him
 
-TURNAROUND
-||: B ////// | /// E/B //:||
+| B | B - F# - | G#m | G#m - F# |
+Our God is a Lamb
+The Lamb that was slain
+For the sins of the world
+His blood breaks the chains
 
-VERSE 3
-||: B ////// | /// E/B //:||
-I’m not afraid
-To show You my weakness
-| G#m | F# | E | ////// |
-My failures and flaws
-Lord You’ve seen them all
-And You still call me friend
-
-VERSE 4
-||: B ////// | /// E/B //:||
-‘Cause the God of the mountain
-Is the God of the valley
-
-
-| G#m | F# | E | ////// |
-There’s not a place
-Your mercy and grace
-Won’t find me again
+And every knee will bow
+Before the Lion and the Lamb
+| E | F# | E | F# |
+Every knee will bow before Him
 
 INSTRUMENTAL
-||: B ////// | /// E //:||
+| B | B - C#m - | E | //// |
 
-BRIDGE 1
-||: B ////// | /// E //:||
-You turn mourning to dancing
-You give beauty for ashes
-| B ////// | /// E // |
-You turn shame into glory
-| G#m  E | B |
-You’re the only one who can
+VERSE 2
+| B | B - C#m - | E | //// |
+Open up the gates
+Make way before the King of Kings
+| G#m | G#m - F# - | E | F# |
+The God who comes to save
+Is here to set the captives free
+For who can stop the Lord Almighty
 
-BRIDGE 2
-||: B ////// | /// E //:||
-You turn graves into gardens
-You turn bones into armies
-| B ////// | /// E // |
-You turn seas into highways
-| G#m  E | B |
-You’re the only one who can
-| G#m  E | B |
-You’re the only one who can
 
-CHORUS
-| B | ////// | G#m | ////// |
-Oh there’s nothing better than You
-There’s nothing better than You
-| E | ////// | B | ////// |
-Lord there’s nothing, nothing is better than You
+
+
+INTERLUDE
+| C#m | B/D# | E | F# |
+
+BRIDGE
+||: C#m | B/D# | E | F# :||
+Who can stop the Lord Almighty,
+Who can stop the Lord Almighty
+Who can stop the Lord Almighty,
+Who can stop the Lord
+
+TAG
+| B | B /// |
 
 OUTRO
-| G#m  E | B |
-You’re the only one who can
+||: B | B - - E :||
 
-ENDING
+OPTIONAL ENDING
 ||: B :||
