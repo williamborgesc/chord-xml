@@ -1,12 +1,12 @@
 package com.williamborgesc.chordxml;
 
 import com.williamborgesc.chordxml.parser.ChordsParser;
+import com.williamborgesc.chordxml.parser.KindParser;
 import com.williamborgesc.chordxml.score.Constants;
 import com.williamborgesc.chordxml.score.DefaultScore;
 import com.williamborgesc.chordxml.score.KeyEnum;
 import com.williamborgesc.chordxml.score.PartHelper;
 import generated.Harmony;
-import generated.KindValue;
 import generated.ScorePartwise;
 
 import javax.xml.bind.JAXBContext;
@@ -22,11 +22,14 @@ import static com.williamborgesc.chordxml.score.Constants.RITORNELLO_START;
 public class Application {
 
     public static String key = "B";
-    public static String timeSignature = "4/4";
+    public static String timeSignature = "12/8";
     public static String songName = "Test";
 
-    // TODO Tetrades
-    // TODO Create Screen
+    // TODO check when C7/E
+    // TODO Create Screen (thymeleaf)
+    // TODO Add metadata
+    // TODO add placeholders for tempo, subtitle and author
+    // TODO Parse degrees
 
     public static void main(String[] args) throws JAXBException {
         List<String> measures = ChordsParser.parseFileToMeasures(new File("D:\\Dev\\eclipse-wp\\chord-xml\\source.txt"));
@@ -69,7 +72,6 @@ public class Application {
                     measure = PartHelper.createMeasure(String.valueOf(measureNumber++), divisions);
                 }
                 keepMeasure = false;
-
                 if (measureString.equals(RITORNELLO_START)) {
                     addRepeatStartToMeasure(measure);
                     keepMeasure = true;
@@ -80,7 +82,7 @@ public class Application {
                     keepMeasure = true;
                     continue;
                 }
-                String[] chords = measureString.replaceAll("\\/{2,}", "/").split(" ");
+                String[] chords = handleMultipleSlashes(measureString).split(" ");
                 Integer noteDuration = Integer.valueOf(beats) / chords.length;
 
                 if (measureString.contains("%")) {
@@ -91,6 +93,10 @@ public class Application {
                 part.getMeasure().add(measure);
             }
         }
+    }
+
+    private static String handleMultipleSlashes(String measureString) {
+        return measureString.replaceAll("\\/{2,}", "/");
     }
 
     private static void addRepeatStartToMeasure(ScorePartwise.Part.Measure measure) {
@@ -116,7 +122,7 @@ public class Application {
     }
 
     private static void addHarmonyToMeasure(ScorePartwise.Part.Measure measure, Integer noteDuration, String chord) {
-        Harmony harmony = PartHelper.createHarmony(getRootNote(chord), getChordKind(chord), getAlter(chord), getBass(chord), getBassAlter(chord));
+        Harmony harmony = PartHelper.createHarmony(getRootNote(chord), KindParser.getChordKind(chord), getAlter(chord), getBass(chord), getBassAlter(chord));
         measure.getNoteOrBackupOrForward().add(harmony);
         measure.getNoteOrBackupOrForward().add(PartHelper.createNote(new BigDecimal(noteDuration.toString())));
     }
@@ -137,10 +143,6 @@ public class Application {
             return null;
         }
         return getRootNote(chord.split("/")[1]);
-    }
-
-    private static KindValue getChordKind(String chord) {
-        return chord.contains(Constants.MINOR) ? KindValue.MINOR : KindValue.MAJOR;
     }
 
     private static String getAlter(String chord) {

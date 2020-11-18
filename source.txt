@@ -1,8 +1,8 @@
 INTRO
-||: B | B - C#m - | E | //// :||
+||: Eb Dm Gm Eb | Eb/F F7 Bb6 Bbmaj7 | Eb7/Ab F9 Gb13 Gb11 | B69 Gb13(#11) :||
 
 VERSE 1
-||: B | B - C#m - | E | //// :||
+||: B11 | B13 - C#m - | E | //// :||
 He's coming on the clouds
 Kings and kingdoms will bow down
 | G#m | G#m - F# - | E | F# |
