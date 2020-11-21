@@ -1,7 +1,7 @@
 package com.williamborgesc.chordxml;
 
-import com.williamborgesc.chordxml.parser.ChordsParser;
-import com.williamborgesc.chordxml.parser.KindParser;
+import com.williamborgesc.chordxml.parser.ChordParser;
+import com.williamborgesc.chordxml.parser.ChordSheetParser;
 import com.williamborgesc.chordxml.score.Constants;
 import com.williamborgesc.chordxml.score.DefaultScore;
 import com.williamborgesc.chordxml.score.KeyEnum;
@@ -16,6 +16,11 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static com.williamborgesc.chordxml.parser.ChordParser.getBass;
+import static com.williamborgesc.chordxml.parser.ChordParser.getBassAlter;
+import static com.williamborgesc.chordxml.parser.ChordParser.getChordKind;
+import static com.williamborgesc.chordxml.parser.ChordParser.getNoteAlter;
+import static com.williamborgesc.chordxml.parser.ChordParser.getRootNote;
 import static com.williamborgesc.chordxml.score.Constants.RITORNELLO_END;
 import static com.williamborgesc.chordxml.score.Constants.RITORNELLO_START;
 
@@ -25,14 +30,13 @@ public class Application {
     public static String timeSignature = "12/8";
     public static String songName = "Test";
 
-    // TODO check when C7/E
     // TODO Create Screen (thymeleaf)
-    // TODO Add metadata
+    // TODO Add metadata (author, transcription...)
     // TODO add placeholders for tempo, subtitle and author
     // TODO Parse degrees
 
     public static void main(String[] args) throws JAXBException {
-        List<String> measures = ChordsParser.parseFileToMeasures(new File("D:\\Dev\\eclipse-wp\\chord-xml\\source.txt"));
+        List<String> measures = ChordSheetParser.parseFileToMeasures(new File("D:\\Dev\\eclipse-wp\\chord-xml\\source.txt"));
         ScorePartwise.Part part = new ScorePartwise.Part();
 
         if (!timeSignature.contains("/")) {
@@ -65,7 +69,7 @@ public class Application {
         for (String measureString : measures) {
             if (measureString.startsWith(Constants.SONG_SECTION)) {
                 measure = PartHelper.createMeasure(String.valueOf(measureNumber++), divisions);
-                measure.getNoteOrBackupOrForward().add(PartHelper.createRehearsalMark(getLetter(markChar++)));
+                measure.getNoteOrBackupOrForward().add(PartHelper.createRehearsalMark(toCharString(markChar++)));
                 keepMeasure = true;
             } else {
                 if (!keepMeasure) {
@@ -122,44 +126,12 @@ public class Application {
     }
 
     private static void addHarmonyToMeasure(ScorePartwise.Part.Measure measure, Integer noteDuration, String chord) {
-        Harmony harmony = PartHelper.createHarmony(getRootNote(chord), KindParser.getChordKind(chord), getAlter(chord), getBass(chord), getBassAlter(chord));
+        Harmony harmony = PartHelper.createHarmony(getRootNote(chord), getChordKind(chord), getNoteAlter(chord), getBass(chord), getBassAlter(chord));
         measure.getNoteOrBackupOrForward().add(harmony);
         measure.getNoteOrBackupOrForward().add(PartHelper.createNote(new BigDecimal(noteDuration.toString())));
     }
 
-    private static String getRootNote(String chord) {
-        return chord.substring(0, 1);
-    }
-
-    private static String getBassAlter(String chord) {
-        if (!chord.contains("/")) {
-            return null;
-        }
-        return getAlter(chord.split("/")[1]);
-    }
-
-    private static String getBass(String chord) {
-        if (!chord.contains("/")) {
-            return null;
-        }
-        return getRootNote(chord.split("/")[1]);
-    }
-
-    private static String getAlter(String chord) {
-        if (chord.contains("/")) {
-            return getAlter(chord.split("/")[0]);
-        }
-        if (chord.contains(Constants.SHARP)) {
-            return Constants.SHARP;
-        }
-        if (chord.contains(Constants.FLAT)) {
-            return Constants.FLAT;
-        }
-
-        return "";
-    }
-
-    private static String getLetter(int markChar) {
+    private static String toCharString(int markChar) {
         return String.valueOf((char) markChar);
     }
 }

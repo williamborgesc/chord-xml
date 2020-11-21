@@ -5,10 +5,10 @@ import generated.KindValue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class KindParser {
+public class ChordParser {
 
     public static KindValue getChordKind(String chord) {
-        for (KindPatterns kindPattern : KindPatterns.values()) {
+        for (ChordParser.KindPatterns kindPattern : ChordParser.KindPatterns.values()) {
             Pattern pattern = Pattern.compile(kindPattern.pattern);
             Matcher matcher = pattern.matcher(chord);
             if (matcher.find()) {
@@ -16,6 +16,37 @@ public class KindParser {
             }
         }
         return KindValue.MAJOR;
+    }
+
+    public static String getRootNote(String chord) {
+        return chord.substring(0, 1);
+    }
+
+    public static String getNoteAlter(String chord) {
+        Pattern pattern = Pattern.compile("^[A-G]([b#])(:?/[A-G][b#])?");
+        Matcher matcher = pattern.matcher(chord);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return "";
+    }
+
+    public static String getBassAlter(String chord) {
+        Pattern pattern = Pattern.compile("/[A-G]([b#])");
+        Matcher matcher = pattern.matcher(chord);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return "";
+    }
+
+    public static String getBass(String chord) {
+        Pattern pattern = Pattern.compile("/([A-G])[b#]?");
+        Matcher matcher = pattern.matcher(chord);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return null;
     }
 
     private static enum KindPatterns {
@@ -50,5 +81,3 @@ public class KindParser {
         }
     }
 }
-
-

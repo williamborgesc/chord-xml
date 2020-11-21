@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ChordsParser {
+public class ChordSheetParser {
 
     public static final String UTF_8 = "utf-8";
     public static final String NEW_LINE = "\r\n";
