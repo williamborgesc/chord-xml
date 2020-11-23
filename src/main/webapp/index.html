@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>XChord - Chords to Music Sheet Converter</title>
+    <link rel="stylesheet" href="style.css">
+
+<body>
+    <form action="/">
+        <header class="banner">
+            <h1>XChord</h1>
+            <div class="clear"></div>
+            <h2>Chords to Music Sheet Converter</h2>
+        </header>
+        <div class="content">
+            <div class="options">
+                <div class="field">
+                    <label for="name">Song Name</label>
+                    <div class="clear"></div>
+                    <input type="text" maxlength="100" id="name" />
+                </div>
+                <div class="field">
+                    <label for="key">Key</label>
+                    <div class="clear"></div>
+                    <select class="key-select" id="key" name="key">
+                        <option value="Ab">Ab</option>
+                        <option value="A">A</option>
+                        <option value="A#">A#</option>
+                        <option value="Bb">Bb</option>
+                        <option value="B">B</option>
+                        <option value="C" selected>C</option>
+                        <option value="C#">C#</option>
+                        <option value="Db">Db</option>
+                        <option value="D">D</option>
+                        <option value="D#">D#</option>
+                        <option value="Eb">Eb</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="F#">F#</option>
+                        <option value="Gb">Gb</option>
+                        <option value="G">G</option>
+                        <option value="G#">G#</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="beats">Time Signature</label>
+                    <div class="clear"></div>
+                    <input type="number" max="128" min="1" id="beats" value="4" />
+                    /
+                    <select class="beat-select" id="beat-type" se name="beat-type">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="4" selected>4</option>
+                        <option value="8">8</option>
+                        <option value="16">16</option>
+                        <option value="32">32</option>
+                        <option value="64">64</option>
+                    </select>
+                </div>
+                <button type="submit">Convert</button>
+            </div>
+            <div class="chords-container">
+                <textarea id="chords"></textarea>
+            </div>
+        </div>
+    </form>
+</body>
+
+</html>
