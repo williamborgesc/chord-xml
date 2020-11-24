@@ -20,8 +20,6 @@ public class Main {
     public static void main(String[] args) throws JAXBException, IOException {
 
 //        readPart();
-
-
         String chord = "B6";
 
 

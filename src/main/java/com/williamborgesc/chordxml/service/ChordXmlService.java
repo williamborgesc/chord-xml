@@ -1,6 +1,6 @@
-package com.williamborgesc.chordxml;
+package com.williamborgesc.chordxml.service;
 
-import com.williamborgesc.chordxml.parser.ChordParser;
+import com.williamborgesc.chordxml.domain.ChordXmlConversion;
 import com.williamborgesc.chordxml.parser.ChordSheetParser;
 import com.williamborgesc.chordxml.score.Constants;
 import com.williamborgesc.chordxml.score.DefaultScore;
@@ -8,10 +8,12 @@ import com.williamborgesc.chordxml.score.KeyEnum;
 import com.williamborgesc.chordxml.score.PartHelper;
 import generated.Harmony;
 import generated.ScorePartwise;
+import org.springframework.stereotype.Service;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.List;
@@ -24,19 +26,15 @@ import static com.williamborgesc.chordxml.parser.ChordParser.getRootNote;
 import static com.williamborgesc.chordxml.score.Constants.RITORNELLO_END;
 import static com.williamborgesc.chordxml.score.Constants.RITORNELLO_START;
 
-public class Application {
+@Service
+public class ChordXmlService {
 
-    public static String key = "B";
-    public static String timeSignature = "12/8";
-    public static String songName = "Test";
-
-    // TODO Create Screen (thymeleaf)
     // TODO Add metadata (author, transcription...)
     // TODO add placeholders for tempo, subtitle and author
-    // TODO Parse degrees
+    // TODO Parse degrees (G6/9 G11(13#))
 
-    public static void main(String[] args) throws JAXBException {
-        List<String> measures = ChordSheetParser.parseFileToMeasures(new File("D:\\Dev\\eclipse-wp\\chord-xml\\source.txt"));
+    public ByteArrayOutputStream convert(String songName, String key, String timeSignature, String chords) throws JAXBException {
+        List<String> measures = ChordSheetParser.parseFileToMeasures(chords);
         ScorePartwise.Part part = new ScorePartwise.Part();
 
         if (!timeSignature.contains("/")) {
@@ -44,21 +42,23 @@ public class Application {
         }
 
         String[] tempoTokens = timeSignature.split("/");
-
         String beats = tempoTokens[0];
         String beatsType = tempoTokens[1];
         BigDecimal divisions = new BigDecimal(beatsType).divide(new BigDecimal("4"));
 
         part.getMeasure().add(PartHelper.createLeadingMeasure(String.valueOf(1), KeyEnum.fromValue(key), beats, beatsType, divisions));
-
         addMeasuresToPart(measures, part, beats, beatsType, divisions);
 
         DefaultScore score = new DefaultScore(songName, part);
 
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+
         JAXBContext jaxbContext = JAXBContext.newInstance(ScorePartwise.class);
         Marshaller marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        marshaller.marshal(score, new File("D:\\William\\Desktop\\" + songName + ".musicxml"));
+        marshaller.marshal(score, result);
+
+        return result;
     }
 
     private static void addMeasuresToPart(List<String> measures, ScorePartwise.Part part, String beats, String beatsType, BigDecimal divisions) {
@@ -68,21 +68,24 @@ public class Application {
         ScorePartwise.Part.Measure measure = null;
         for (String measureString : measures) {
             if (measureString.startsWith(Constants.SONG_SECTION)) {
+                if(keepMeasure){
+                    part.getMeasure().add(measure);
+                }
                 measure = PartHelper.createMeasure(String.valueOf(measureNumber++), divisions);
                 measure.getNoteOrBackupOrForward().add(PartHelper.createRehearsalMark(toCharString(markChar++)));
                 keepMeasure = true;
             } else {
+                if (measureString.equals(RITORNELLO_END)) {
+                    addRepeatEndToMeasure(measure);
+                    keepMeasure = false;
+                    continue;
+                }
                 if (!keepMeasure) {
                     measure = PartHelper.createMeasure(String.valueOf(measureNumber++), divisions);
                 }
                 keepMeasure = false;
                 if (measureString.equals(RITORNELLO_START)) {
                     addRepeatStartToMeasure(measure);
-                    keepMeasure = true;
-                    continue;
-                }
-                if (measureString.equals(RITORNELLO_END)) {
-                    addRepeatEndToMeasure(measure);
                     keepMeasure = true;
                     continue;
                 }
@@ -134,4 +137,5 @@ public class Application {
     private static String toCharString(int markChar) {
         return String.valueOf((char) markChar);
     }
+
 }

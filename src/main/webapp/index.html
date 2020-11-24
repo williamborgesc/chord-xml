@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
 
 <body>
-    <form action="/">
+    <form action="/conversions" method="post">
         <header class="banner">
             <h1>XChord</h1>
             <div class="clear"></div>
@@ -17,7 +17,7 @@
                 <div class="field">
                     <label for="name">Song Name</label>
                     <div class="clear"></div>
-                    <input type="text" maxlength="100" id="name" />
+                    <input type="text" maxlength="100" id="name" name="songName" />
                 </div>
                 <div class="field">
                     <label for="key">Key</label>
@@ -46,9 +46,9 @@
                 <div class="field">
                     <label for="beats">Time Signature</label>
                     <div class="clear"></div>
-                    <input type="number" max="128" min="1" id="beats" value="4" />
+                    <input type="number" max="128" min="1" id="beats" name="beats" value="4" />
                     /
-                    <select class="beat-select" id="beat-type" se name="beat-type">
+                    <select class="beat-select" id="beat-type" se name="beatType">
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="4" selected>4</option>
@@ -61,7 +61,7 @@
                 <button type="submit">Convert</button>
             </div>
             <div class="chords-container">
-                <textarea id="chords"></textarea>
+                <textarea id="chords" name="chords"></textarea>
             </div>
         </div>
     </form>
