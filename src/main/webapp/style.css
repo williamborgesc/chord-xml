@@ -70,8 +70,11 @@ form {
      background-color: #F1F1ED;
 }
 
-input, select {
+.form-group {
      margin-bottom: 10px;
+}
+
+input, select {
      margin-top: 5px;
      border: 1px solid #ccc;
      border-radius: 3px;
@@ -103,7 +106,7 @@ select {
 button {
      background-color: #001aff;
      color: white;
-     padding: 1vh 1vw;
+     padding: 2vh 1vw;
      margin: 2vw 0;
      border: none;
      cursor: pointer;
@@ -129,4 +132,18 @@ textarea {
      outline: none;
      resize: vertical;
      padding: 2% 3%
+}
+
+.has-error label, .has-error input, .has-error textarea {
+     color: red;
+     border-color: red;
+     border-style: solid;
+     border-width: 1px;
+}
+
+.list-unstyled li {
+     font-size: 13px;
+     padding: 4px 0 0;
+     color: red;
+     list-style: none;
 }

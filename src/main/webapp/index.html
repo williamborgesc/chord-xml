@@ -4,67 +4,74 @@
 <head>
     <title>XChord - Chords to Music Sheet Converter</title>
     <link rel="stylesheet" href="style.css">
-
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
 <body>
-    <form action="/conversions" method="post">
-        <header class="banner">
-            <h1>XChord</h1>
-            <div class="clear"></div>
-            <h2>Chords to Music Sheet Converter</h2>
-        </header>
-        <div class="content">
-            <div class="options">
-                <div class="field">
-                    <label for="name">Song Name</label>
-                    <div class="clear"></div>
-                    <input type="text" maxlength="100" id="name" name="songName" />
-                </div>
-                <div class="field">
-                    <label for="key">Key</label>
-                    <div class="clear"></div>
-                    <select class="key-select" id="key" name="key">
-                        <option value="Ab">Ab</option>
-                        <option value="A">A</option>
-                        <option value="A#">A#</option>
-                        <option value="Bb">Bb</option>
-                        <option value="B">B</option>
-                        <option value="C" selected>C</option>
-                        <option value="C#">C#</option>
-                        <option value="Db">Db</option>
-                        <option value="D">D</option>
-                        <option value="D#">D#</option>
-                        <option value="Eb">Eb</option>
-                        <option value="E">E</option>
-                        <option value="F">F</option>
-                        <option value="F#">F#</option>
-                        <option value="Gb">Gb</option>
-                        <option value="G">G</option>
-                        <option value="G#">G#</option>
-                    </select>
-                </div>
-
-                <div class="field">
-                    <label for="beats">Time Signature</label>
-                    <div class="clear"></div>
-                    <input type="number" max="128" min="1" id="beats" name="beats" value="4" />
-                    /
-                    <select class="beat-select" id="beat-type" se name="beatType">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="4" selected>4</option>
-                        <option value="8">8</option>
-                        <option value="16">16</option>
-                        <option value="32">32</option>
-                        <option value="64">64</option>
-                    </select>
-                </div>
-                <button type="submit">Convert</button>
+<form action="/conversions" method="post" role="form" data-toggle="validator">
+    <header class="banner">
+        <h1>XChord</h1>
+        <div class="clear"></div>
+        <h2>Chords to Music Sheet Converter</h2>
+    </header>
+    <div class="content">
+        <div class="options">
+            <div class="field form-group">
+                <label for="name">Song Name</label>
+                <div class="clear"></div>
+                <input type="text" maxlength="100" id="name" name="songName" required
+                       class="form-control" data-error="You must type a song name."/>
+                <div class="help-block with-errors"></div>
             </div>
-            <div class="chords-container">
-                <textarea id="chords" name="chords"></textarea>
+            <div class="form-group">
+                <label for="key">Key</label>
+                <div class="clear"></div>
+                <select class="key-select" id="key" name="key">
+                    <option value="Ab">Ab</option>
+                    <option value="A">A</option>
+                    <option value="A#">A#</option>
+                    <option value="Bb">Bb</option>
+                    <option value="B">B</option>
+                    <option value="C" selected>C</option>
+                    <option value="C#">C#</option>
+                    <option value="Db">Db</option>
+                    <option value="D">D</option>
+                    <option value="D#">D#</option>
+                    <option value="Eb">Eb</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="F#">F#</option>
+                    <option value="Gb">Gb</option>
+                    <option value="G">G</option>
+                    <option value="G#">G#</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="beats">Time Signature</label>
+                <div class="clear"></div>
+                <input type="number" max="128" min="1" id="beats" name="beats" value="4"/>
+                /
+                <select class="beat-select" id="beat-type" se name="beatType">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="4" selected>4</option>
+                    <option value="8">8</option>
+                    <option value="16">16</option>
+                    <option value="32">32</option>
+                    <option value="64">64</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btsn-primary btn-block">Convert</button>
             </div>
         </div>
-    </form>
+        <div class="chords-container form-group">
+            <div class="help-block with-errors"></div>
+            <textarea id="chords" name="chords" required placeholder="Type or paste your chord chart..."
+                      class="form-control" data-error="You must provide a chord chart."></textarea>
+            
+        </div>
+    </div>
+</form>
 </body>
-
 </html>
