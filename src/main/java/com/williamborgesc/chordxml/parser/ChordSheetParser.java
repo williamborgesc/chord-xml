@@ -11,6 +11,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.williamborgesc.chordxml.score.Constants.RITORNELLO_END;
+import static com.williamborgesc.chordxml.score.Constants.RITORNELLO_START;
+import static com.williamborgesc.chordxml.score.Constants.SONG_SECTION;
+
 public class ChordSheetParser {
 
     public static final String UTF_8 = "utf-8";
@@ -19,17 +23,17 @@ public class ChordSheetParser {
 
     public static List<String> parseFileToMeasures(String source) {
         List<String> sourceLines = null;
-        source = source.replaceAll(DOUBLE_NEW_LINE, NEW_LINE + Constants.SONG_SECTION + " ");
+        source = SONG_SECTION.concat(source.replaceAll(DOUBLE_NEW_LINE, NEW_LINE + SONG_SECTION + " "));
 
         sourceLines = Arrays.asList(source.split(NEW_LINE));
 
         List<String> measures = new ArrayList<>();
 
         sourceLines.stream()
-                .filter(line -> line.startsWith("|") || line.startsWith(Constants.SONG_SECTION))
-                .map(line -> line.replace(":||:", "| " + Constants.RITORNELLO_END + " |" + Constants.RITORNELLO_START + " |"))
-                .map(line -> line.replace("||:", "| " + Constants.RITORNELLO_START + " |"))
-                .map(line -> line.replace(":||", "| " + Constants.RITORNELLO_END + " |"))
+                .filter(line -> line.startsWith("|") || line.startsWith(SONG_SECTION))
+                .map(line -> line.replace(":||:", "| " + RITORNELLO_END + " |" + RITORNELLO_START + " |"))
+                .map(line -> line.replace("||:", "| " + RITORNELLO_START + " |"))
+                .map(line -> line.replace(":||", "| " + RITORNELLO_END + " |"))
                 .forEach(line -> measures.addAll(extractMeasures(line)));
 
         return measures;
