@@ -17,6 +17,7 @@ import generated.Key;
 import generated.Kind;
 import generated.KindValue;
 import generated.Note;
+import generated.Print;
 import generated.Repeat;
 import generated.Rest;
 import generated.Root;
@@ -218,5 +219,11 @@ public class PartHelper {
         barline.setRepeat(repeat);
 
         return barline;
+    }
+
+    public static Print createLineBreak() {
+        Print print =new Print();
+        print.setNewSystem(YesNo.YES);
+        return print;
     }
 }

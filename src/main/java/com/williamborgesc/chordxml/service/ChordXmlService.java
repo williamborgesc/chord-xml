@@ -1,6 +1,5 @@
 package com.williamborgesc.chordxml.service;
 
-import com.williamborgesc.chordxml.domain.ChordXmlConversion;
 import com.williamborgesc.chordxml.parser.ChordSheetParser;
 import com.williamborgesc.chordxml.score.Constants;
 import com.williamborgesc.chordxml.score.DefaultScore;
@@ -14,7 +13,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -29,10 +27,8 @@ import static com.williamborgesc.chordxml.score.Constants.RITORNELLO_START;
 @Service
 public class ChordXmlService {
 
-    // TODO Add LineBreak before rehearse
-    // TODO Disable button when converting
-    // TODO Add metadata (author, transcription...)
     // TODO add placeholders for tempo, subtitle and author
+    // TODO Add metadata (author, transcription...)
     // TODO Parse degrees (G6/9 G11(13#))
 
     public ByteArrayOutputStream convert(String songName, String key, String timeSignature, String chords) throws JAXBException {
@@ -70,11 +66,11 @@ public class ChordXmlService {
         ScorePartwise.Part.Measure measure = null;
         for (String measureString : measures) {
             if (measureString.startsWith(Constants.SONG_SECTION)) {
-                if(keepMeasure){
+                if (keepMeasure) {
                     part.getMeasure().add(measure);
                 }
                 measure = PartHelper.createMeasure(String.valueOf(measureNumber++), divisions);
-                measure.getNoteOrBackupOrForward().add(PartHelper.createRehearsalMark(toCharString(markChar++)));
+                markChar = addRehearsalMarkToMeasure(markChar, measure);
                 keepMeasure = true;
             } else {
                 if (measureString.equals(RITORNELLO_END)) {
@@ -102,6 +98,14 @@ public class ChordXmlService {
                 part.getMeasure().add(measure);
             }
         }
+    }
+
+    private static int addRehearsalMarkToMeasure(int markChar, ScorePartwise.Part.Measure measure) {
+        if (markChar > 65) {
+            measure.getNoteOrBackupOrForward().add(PartHelper.createLineBreak());
+        }
+        measure.getNoteOrBackupOrForward().add(PartHelper.createRehearsalMark(toCharString(markChar++)));
+        return markChar;
     }
 
     private static String handleMultipleSlashes(String measureString) {
