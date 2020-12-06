@@ -29,6 +29,8 @@ import static com.williamborgesc.chordxml.score.Constants.RITORNELLO_START;
 @Service
 public class ChordXmlService {
 
+    // TODO Add LineBreak before rehearse
+    // TODO Disable button when converting
     // TODO Add metadata (author, transcription...)
     // TODO add placeholders for tempo, subtitle and author
     // TODO Parse degrees (G6/9 G11(13#))
