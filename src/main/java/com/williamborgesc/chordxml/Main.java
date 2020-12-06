@@ -15,6 +15,7 @@ import java.io.StringReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Deprecated
 public class Main {
 
     public static void main(String[] args) throws JAXBException, IOException {
