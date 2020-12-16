@@ -16,7 +16,9 @@ import generated.Harmony;
 import generated.Key;
 import generated.Kind;
 import generated.KindValue;
+import generated.Metronome;
 import generated.Note;
+import generated.PerMinute;
 import generated.Print;
 import generated.Repeat;
 import generated.Rest;
@@ -34,6 +36,8 @@ import javax.xml.namespace.QName;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import static com.williamborgesc.chordxml.score.BeatUnit.fromBeatType;
+
 public class PartHelper {
 
     public static final BigDecimal DEFAULT_MEASURE_WIDTH = new BigDecimal("240");
@@ -46,6 +50,7 @@ public class PartHelper {
         measure.setNumber(number);
         measure.getNoteOrBackupOrForward().add(getLeadingAttributes(key, beats, beatsType, divisions));
         measure.getNoteOrBackupOrForward().add(getNote(beats));
+        measure.getNoteOrBackupOrForward().add(createTempo(beatsType));
 
         return measure;
     }
@@ -118,6 +123,26 @@ public class PartHelper {
         return note;
     }
 
+
+    public static Direction createTempo(String beatType) {
+        DirectionType directionType = new DirectionType();
+
+        Metronome metronome = new Metronome();
+        PerMinute perMinute = new PerMinute();
+        perMinute.setValue("100");
+
+        metronome.getContent().add(new JAXBElement(new QName("beat-unit"), String.class, Metronome.class, fromBeatType(beatType)));
+        metronome.getContent().add(new JAXBElement(new QName("per-minute"), PerMinute.class, Metronome.class, perMinute));
+
+        metronome.setParentheses(YesNo.NO);
+        directionType.setMetronome(metronome);
+
+        Direction direction = new Direction();
+        direction.setPlacement(AboveBelow.ABOVE);
+        direction.getDirectionType().add(directionType);
+
+        return direction;
+    }
 
     public static Direction createRehearsalMark(String text) {
 
@@ -222,7 +247,7 @@ public class PartHelper {
     }
 
     public static Print createLineBreak() {
-        Print print =new Print();
+        Print print = new Print();
         print.setNewSystem(YesNo.YES);
         return print;
     }

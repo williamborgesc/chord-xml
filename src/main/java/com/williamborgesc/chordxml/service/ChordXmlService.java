@@ -27,7 +27,9 @@ import static com.williamborgesc.chordxml.score.Constants.RITORNELLO_START;
 @Service
 public class ChordXmlService {
 
-    // TODO add placeholders for tempo, subtitle and author
+    // TODO add placeholders for subtitle and author
+    // TODO Validate when no bars found
+    // TODO disable button when has errors
     // TODO Add metadata (author, transcription...)
     // TODO Parse degrees (G6/9 G11(13#))
 
@@ -45,7 +47,7 @@ public class ChordXmlService {
         BigDecimal divisions = new BigDecimal(beatsType).divide(new BigDecimal("4"));
 
         part.getMeasure().add(PartHelper.createLeadingMeasure(String.valueOf(1), KeyEnum.fromValue(key), beats, beatsType, divisions));
-        addMeasuresToPart(measures, part, beats, beatsType, divisions);
+        addMeasuresToPart(measures, part, beats, divisions);
 
         DefaultScore score = new DefaultScore(songName, part);
 
@@ -59,7 +61,7 @@ public class ChordXmlService {
         return result;
     }
 
-    private static void addMeasuresToPart(List<String> measures, ScorePartwise.Part part, String beats, String beatsType, BigDecimal divisions) {
+    private static void addMeasuresToPart(List<String> measures, ScorePartwise.Part part, String beats, BigDecimal divisions) {
         boolean keepMeasure = false;
         int measureNumber = 2;
         int markChar = 65;
@@ -128,6 +130,7 @@ public class ChordXmlService {
                 addHarmonyToMeasure(measure, noteDuration, chords[i]);
             }
         }
+
     }
 
     private static void addNoteToMeasure(ScorePartwise.Part.Measure measure, Integer noteDuration) {
