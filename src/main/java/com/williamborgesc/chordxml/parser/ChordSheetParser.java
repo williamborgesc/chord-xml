@@ -34,6 +34,7 @@ public class ChordSheetParser {
                 .map(line -> line.replace(":||:", "| " + RITORNELLO_END + " |" + RITORNELLO_START + " |"))
                 .map(line -> line.replace("||:", "| " + RITORNELLO_START + " |"))
                 .map(line -> line.replace(":||", "| " + RITORNELLO_END + " |"))
+                .map(line -> line.replaceAll("\\.", " "))
                 .forEach(line -> measures.addAll(extractMeasures(line)));
 
         return measures;
